@@ -1,6 +1,44 @@
 // Load the Express package for to handle the HTTP stuff
 var express = require('express');
 var bodyParser = require('body-parser');
+var mqtt = require('mqtt');
+var ListsModel = require('./models/lists');
+
+// Setup the MQTT Protocol
+var options = {
+      protocolId: 'MQIsdp',
+        protocolVersion: 3
+};
+
+var mqttClient = mqtt.connect('mqtt://bruce.surrealitylabs.com', options);
+
+mqttClient.on('connect', function() {
+    mqttClient.subscribe('/lists/fogden/0');
+    mqttClient.subscribe('/lists/fogden/1');
+    mqttClient.subscribe('/lists/fogden/2');
+    mqttClient.subscribe('/lists/fogden/3');
+    mqttClient.subscribe('/lists/fogden/4');
+    mqttClient.subscribe('/lists/fogden/5');
+    mqttClient.subscribe('/lists/fogden/6');
+    mqttClient.subscribe('/lists/fogden/7');
+    mqttClient.subscribe('/lists/fogden/8');
+});
+
+
+mqttClient.on('message', function(topic, message) {
+    if(topic == '/lists/fogden/0') { // REPEAT FOR EACH 1..8
+        // CHRIS: Message is new status
+        var newStatus = message.toString('ascii');
+        ListsModel.updateListMQTT(0, newStatus);
+        mqttClient.publish('/lists/fogden/updates', '1' + message);
+    } 
+    else if(topic == '/lists/fogden/notice') {
+        if(message == '1') {
+            // send an update to each list/fogden/n with current status
+        }
+    }
+});
+
 
 //Get this app party started
 var app = express();
