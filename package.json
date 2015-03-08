@@ -1,0 +1,17 @@
+{
+  "name": "babby",
+  "version": "1.0.0",
+  "description": "Babby REST Server",
+  "main": "babby.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.11.0",
+    "bson": "^0.2.4",
+    "express": "^4.11.1",
+    "mongodb": "^1.4.29"
+  }
+}
